@@ -1,13 +1,22 @@
-# Настройки
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+import apiai, json
 updater = Updater(token='623317837:AAHwNgxSD9Kbz2Tz2NBKewVhNUGYZXNJ6jg') # Токен API к Telegram
 dispatcher = updater.dispatcher
 # Обработка команд
 def startCommand(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text='Привет и пока, давай пообщаемся?')
+    bot.send_message(chat_id=update.message.chat_id, text='Привет, давай пообщаемся?')
 def textMessage(bot, update):
-    response = 'Получил Ваше сообщение: ' + update.message.text
-    bot.send_message(chat_id=update.message.chat_id, text=response)
+    request = apiai.ApiAI('496b61334b5a4450b84957f6e18a70e9').text_request() # Токен API к Dialogflow
+    request.lang = 'ru' # На каком языке будет послан запрос
+    request.session_id = 'BatlabAIBot' # ID Сессии диалога (нужно, чтобы потом учить бота)
+    request.query = update.message.text # Посылаем запрос к ИИ с сообщением от юзера
+    responseJson = json.loads(request.getresponse().read().decode('utf-8'))
+    response = responseJson['result']['fulfillment']['speech'] # Разбираем JSON и вытаскиваем ответ
+    # Если есть ответ от бота - присылаем юзеру, если нет - бот его не понял
+    if response:
+        bot.send_message(chat_id=update.message.chat_id, text=response)
+    else:
+        bot.send_message(chat_id=update.message.chat_id, text='Я Вас не совсем понял!')
 # Хендлеры
 start_command_handler = CommandHandler('start', startCommand)
 text_message_handler = MessageHandler(Filters.text, textMessage)
