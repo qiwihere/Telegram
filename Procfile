@@ -1,1 +1,1 @@
-test
+worker: python TelegramBot.py
