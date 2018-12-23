@@ -5,7 +5,7 @@ dispatcher = updater.dispatcher
 
 
 
-# Обработка команд для бота
+# Обработка команд для бота телеги
 def startCommand(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text='Привет, давай пообщаемся?')
 
