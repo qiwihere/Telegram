@@ -38,7 +38,8 @@ def text_message(bot, update):
 
 def voice_message(bot, update):
     file = bot.getFile(update.message.voice.file_id)
-    data = file.read()
+    with open(file, 'br') as file:
+        data = file.read()
 
     params = "&".join([
         "topic=general",
