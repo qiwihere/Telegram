@@ -37,8 +37,8 @@ def text_message(bot, update):
 
 
 def voice_message(bot, update):
-    file = bot.getFile(update.message.voice.file_id)
-    bot.send_document(chat_id=update.message.chat_id, document=file)
+    file = update.message.voice.file_id
+    bot.send_voice(chat_id=update.message.chat_id, voice=file)
     '''
     with open(file, 'br') as file:
         data = file.read()
