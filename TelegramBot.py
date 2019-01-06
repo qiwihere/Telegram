@@ -31,28 +31,24 @@ def textMessage(bot, update):
 def voiceMessage(bot, update):
     file = bot.get_file(update.message.voice.file_id)
     path = file.download()
-    filedata = open(path, 'rb').read()
 
-    params = "&".join([
-        "topic=general",
-        "folderId=%s" % folder_id,
-        "lang=ru-RU"
-    ])
+    data = open(path, 'rb').read()
+    headers = {
+        'Authorization': 'Bearer '+IAM_TOKEN,
+        'Transfer-Encoding': 'chunked',
+    }
 
-    url = urllib.request.Request("https://stt.api.cloud.yandex.net/speech/v1/stt:recognize/?%s" % params, data=filedata)
-    url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
-    url.add_header("Transfer-Encoding", "chunked")
-
-    responseData = urllib.request.urlopen(url).read().decode('UTF-8')
-    decodedData = json.loads(responseData)
-
-    if decodedData.get("error_code") is None:
-        bot.send_message(chat_id=update.message.chat_id, text=decodedData.get("result"))
-
-    # decodedData = json.loads(responseData)
+    params = (
+        ('topic', 'general'),
+        ('folderId', folder_id),
+    )
 
 
+    response = requests.post('https://stt.api.cloud.yandex.net/speech/v1/stt:recognize/', headers=headers,
+                             params=params, data=data)
 
+    bot.send_message(chat_id=update.message.chat_id, text=response.url)
+    bot.send_message(chat_id=update.message.chat_id, text=response.text)
 
 
 # Хендлеры
