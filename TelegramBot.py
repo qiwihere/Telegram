@@ -35,7 +35,7 @@ def voiceMessage(bot, update):
 
     data = open(path, 'rb').read()
     headers = {
-    #    'Authorization': 'Bearer '+IAM_TOKEN,
+        'Authorization': 'Bearer '+IAM_TOKEN,
         'Transfer-Encoding': 'chunked',
     }
 
