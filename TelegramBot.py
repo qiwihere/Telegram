@@ -5,11 +5,12 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 
 #Получаем IAM Token
-folder_id = 'AQAAAAAhCBSBAATuwXFbrFfLpECUtyfTrytLZFs'
+folder_id = 'b1g5ijjultbev6ue6u3l'
+oauth = 'AQAAAAAhCBSBAATuwXFbrFfLpECUtyfTrytLZFs'
 headers = {
     'Content-Type': 'application/json',
 }
-data = '{"yandexPassportOauthToken": "'+folder_id+'"}'
+data = '{"yandexPassportOauthToken": "'+oauth+'"}'
 response = requests.post('https://iam.api.cloud.yandex.net/iam/v1/tokens', headers=headers, data=data)
 IAM_TOKEN = json.loads(response.text)['iamToken']
 
