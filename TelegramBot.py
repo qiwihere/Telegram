@@ -48,7 +48,7 @@ def voiceMessage(bot, update):
     decodedData = json.loads(responseData)
 
     if decodedData.get("error_code") is None:
-        bot.send_message(chat_id=update.message.chat_id, text=decodedData.get("result"))
+        bot.send_message(chat_id=update.message.chat_id, text=responseData)
 
 
 # Хендлеры
