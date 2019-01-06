@@ -1,7 +1,8 @@
 import requests
 import json
-
+import urllib.request
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+
 
 #Получаем IAM Token
 folder_id = 'AQAAAAAhCBSBAATuwXFbrFfLpECUtyfTrytLZFs'
@@ -30,20 +31,25 @@ def textMessage(bot, update):
 def voiceMessage(bot, update):
     file = bot.get_file(update.message.voice.file_id)
     path = file.download()
-    headers = {
-        'Authorization': 'Bearer '+IAM_TOKEN,
-        'Transfer-Encoding': 'chunked',
-    }
+    # speech_file = open(path, 'rb').read()
 
-    params = (
-        ('topic', 'general'),
-        ('folderId', folder_id),
-    )
+    with open(path, "rb") as f:
+        speech_file = f.read()
 
-    speech_file = open(path, 'rb').read()
-    response = requests.post('https://stt.api.cloud.yandex.net/speech/v1/stt:recognize/', headers=headers,
-                             params=params, data=speech_file)
-    bot.send_message(chat_id=update.message.chat_id, text=response.text)
+    params = "&".join([
+        "topic=general",
+        "folderId=%s" % folder_id,
+        "lang=ru-RU"
+    ])
+
+    url = urllib.request.Request("https://stt.api.cloud.yandex.net/speech/v1/stt:recognize/?%s" % params, data=speech_file)
+    url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
+    url.add_header("Transfer-Encoding", "chunked")
+
+    responseData = urllib.request.urlopen(url).read().decode('UTF-8')
+    # decodedData = json.loads(responseData)
+
+    bot.send_message(chat_id=update.message.chat_id, text=responseData)
 
 
 # Хендлеры
