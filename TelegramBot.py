@@ -26,8 +26,9 @@ def textMessage(bot, update):
 
 
 def voiceMessage(bot, update):
-    file = bot.getFile(update.message.voice.file_id)
-    bot.send_voice(chat_id=update.message.chat_id, voice=open(file))
+    #file = bot.getFile(update.message.voice.file_id)
+    #bot.send_voice(chat_id=update.message.chat_id, voice=open(file))
+    bot.send_message(chat_id=update.message.chat_id, text=update.message.voice.file_id)
 
 
 # Хендлеры
