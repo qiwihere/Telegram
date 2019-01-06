@@ -1,6 +1,6 @@
 import requests
 import json
-import urllib.request
+
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 
@@ -45,7 +45,7 @@ def voiceMessage(bot, update):
     )
 
 
-    response = requests.post('https://stt.api.cloud.yandex.net/speech/v1/stt:recognize/', headers=headers,
+    response = requests.post('https://stt.api.cloud.yandex.net/speech/v1/stt:recognize', headers=headers,
                              params=params, data=data)
 
     bot.send_message(chat_id=update.message.chat_id, text=response.url)
