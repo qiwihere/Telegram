@@ -19,6 +19,16 @@ updater = Updater(token=token) # Токен API к Telegram
 dispatcher = updater.dispatcher
 
 
+# Обработка команд
+def startCommand(bot, update):
+    bot.send_message(chat_id=update.message.chat_id, text=IAM_TOKEN)
+
+
+def textMessage(bot, update):
+    response = 'Получил Ваше сообщение: ' + update.message.text
+    bot.send_message(chat_id=update.message.chat_id, text=response)
+
+
 def voiceMessage(bot, update):
     file = bot.get_file(update.message.voice.file_id)
     path = file.download()
@@ -42,14 +52,14 @@ def voiceMessage(bot, update):
 
 
 # Хендлеры
-#start_command_handler = CommandHandler('start', startCommand)
-#text_message_handler = MessageHandler(Filters.text, textMessage)
-voice_message_handler = MessageHandler(Filters.all, voiceMessage)
+start_command_handler = CommandHandler('start', startCommand)
+text_message_handler = MessageHandler(Filters.text, textMessage)
+voice_message_handler = MessageHandler(Filters.voice, voiceMessage)
 
 
 # Добавляем хендлеры в диспетчер
-#dispatcher.add_handler(start_command_handler)
-#dispatcher.add_handler(text_message_handler)
+dispatcher.add_handler(start_command_handler)
+dispatcher.add_handler(text_message_handler)
 dispatcher.add_handler(voice_message_handler)
 
 
