@@ -1,12 +1,14 @@
 import requests
 import json
+
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 #Получаем IAM Token
+folder_id = 'AQAAAAAhCBSBAATuwXFbrFfLpECUtyfTrytLZFs'
 headers = {
     'Content-Type': 'application/json',
 }
-data = '{"yandexPassportOauthToken": "AQAAAAAhCBSBAATuwXFbrFfLpECUtyfTrytLZFs"}'
+data = '{"yandexPassportOauthToken": "'+folder_id+'"}'
 response = requests.post('https://iam.api.cloud.yandex.net/iam/v1/tokens', headers=headers, data=data)
 IAM_TOKEN = json.loads(response.text)['iamToken']
 
@@ -28,7 +30,20 @@ def textMessage(bot, update):
 def voiceMessage(bot, update):
     file = bot.get_file(update.message.voice.file_id)
     path = file.download()
-    bot.send_voice(chat_id=update.message.chat_id, voice=open(path, 'rb'))
+    headers = {
+        'Authorization': 'Bearer '+IAM_TOKEN,
+        'Transfer-Encoding': 'chunked',
+    }
+
+    params = (
+        ('topic', 'general'),
+        ('folderId', folder_id),
+    )
+
+    speech_file = open(path, 'rb').read()
+    response = requests.post('https://stt.api.cloud.yandex.net/speech/v1/stt:recognize/', headers=headers,
+                             params=params, data=speech_file)
+    bot.send_message(chat_id=update.message.chat_id, text=response.text)
 
 
 # Хендлеры
