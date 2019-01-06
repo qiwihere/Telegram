@@ -25,12 +25,23 @@ def textMessage(bot, update):
     bot.send_message(chat_id=update.message.chat_id, text=response)
 
 
+def voiceMessage(bot, update):
+    file = bot.getFile(update.message.voice.file_id)
+    bot.send_voice(chat_id=update.message.chat_id, voice=open(file))
+
+
 # Хендлеры
 start_command_handler = CommandHandler('start', startCommand)
 text_message_handler = MessageHandler(Filters.text, textMessage)
+voice_message_handler = MessageHandler(Filters.voice, voiceMessage)
+
+
 # Добавляем хендлеры в диспетчер
 dispatcher.add_handler(start_command_handler)
 dispatcher.add_handler(text_message_handler)
+dispatcher.add_handler(voice_message_handler)
+
+
 # Начинаем поиск обновлений
 updater.start_polling(clean=True)
 # Останавливаем бота, если были нажаты Ctrl + C
