@@ -44,7 +44,11 @@ def voiceMessage(bot, update):
     url.add_header("Transfer-Encoding", "chunked")
 
     responseData = urllib.request.urlopen(url).read().decode('UTF-8')
-    bot.send_message(chat_id=update.message.chat_id, text=responseData)
+    decodedData = json.loads(responseData)
+
+    if decodedData.get("error_code") is None:
+        bot.send_message(chat_id=update.message.chat_id, text=decodedData.get("result"))
+
     # decodedData = json.loads(responseData)
 
 
