@@ -19,7 +19,7 @@ dispatcher = updater.dispatcher
 
 # Обработка команд
 def startCommand(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text='Привет, давай пообщаемся?')
+    bot.send_message(chat_id=update.message.chat_id, text=IAM_TOKEN)
 
 
 def textMessage(bot, update):
