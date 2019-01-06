@@ -31,24 +31,24 @@ def textMessage(bot, update):
 def voiceMessage(bot, update):
     file = bot.get_file(update.message.voice.file_id)
     path = file.download()
+    filedata = open(path, 'rb').read()
 
-    data = open(path, 'rb').read()
-    headers = {
-        'Authorization': 'Bearer '+IAM_TOKEN,
-        'Transfer-Encoding': 'chunked',
-    }
+    params = "&".join([
+        "topic=general",
+        "folderId=%s" % folder_id,
+        "lang=ru-RU"
+    ])
 
-    params = (
-        ('topic', 'general'),
-        ('folderId', folder_id),
-    )
+    url = urllib.request.Request("https://stt.api.cloud.yandex.net/speech/v1/stt:recognize/?%s" % params, data=filedata)
+    url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
+    url.add_header("Transfer-Encoding", "chunked")
+
+    responseData = urllib.request.urlopen(url).read().decode('UTF-8')
+    bot.send_message(chat_id=update.message.chat_id, text=responseData)
+    # decodedData = json.loads(responseData)
 
 
-    response = requests.post('https://stt.api.cloud.yandex.net/speech/v1/stt:recognize/', headers=headers,
-                             params=params, data=data)
 
-    bot.send_message(chat_id=update.message.chat_id, text=response.url)
-    bot.send_message(chat_id=update.message.chat_id, text=response.text)
 
 
 # Хендлеры
