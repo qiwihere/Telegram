@@ -49,7 +49,7 @@ def voiceMessage(bot, update):
 
         ])
 
-        url = urllib.request.Request("https://stt.api.cloud.yandex.net/speech/v1/stt:recognize/?%s" % params)
+        url = urllib.request.Request("https://translate.api.cloud.yandex.net/translate/v1/translate/?%s" % params)
         url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
 
         responseData = urllib.request.urlopen(url).read().decode('UTF-8')
