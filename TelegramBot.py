@@ -21,8 +21,8 @@ dispatcher = updater.dispatcher
 
 tr = Translater()
 tr.set_key(translater_key)
-tr.set_from_lang('en')
-tr.set_to_lang('ru')
+tr.set_from_lang('ru')
+tr.set_to_lang('en')
 
 def voiceMessage(bot, update):
     file = bot.get_file(update.message.voice.file_id)
