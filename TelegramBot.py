@@ -41,9 +41,9 @@ def voiceMessage(bot, update):
     #if decodedData.get("error_code") is None:
     #    bot.send_message(chat_id=update.message.chat_id, text=decodedData.get('result'))
     if decodedData.get("error_code") is None:
-        speech_text=decodedData.get('result')
+        speech_text = decodedData.get('result')
         params = "&".join([
-            "text="+speech_text,
+            "text=$s" % speech_text,
             "target=en"
             "folderId=%s" % folder_id,
 
