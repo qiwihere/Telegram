@@ -55,7 +55,7 @@ def voiceMessage(bot, update):
 
         response = requests.post('https://translate.api.cloud.yandex.net/translate/v1/translate', headers=headers,
                                  data=data)
-        bot.send_message(chat_id=update.message.chat_id, text=responseData)
+        bot.send_message(chat_id=update.message.chat_id, text=response.text)
         # decodedData = json.loads(responseData)
 
 
