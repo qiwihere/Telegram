@@ -2,8 +2,9 @@ import requests
 import json
 import urllib.request
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
+from yandex.Translater import Translater
 
-
+translater_key = 'trnsl.1.1.20190107T005840Z.04ecacdc7bfd25ac.9026ad4fc123511c3b40305fe406323a9a6c9e0e'
 #Получаем IAM Token
 folder_id = 'b1g5ijjultbev6ue6u3l'
 oauth = 'AQAAAAAhCBSBAATuwXFbrFfLpECUtyfTrytLZFs'
@@ -18,7 +19,10 @@ token = '623317837:AAHwNgxSD9Kbz2Tz2NBKewVhNUGYZXNJ6jg';
 updater = Updater(token=token) # Токен API к Telegram
 dispatcher = updater.dispatcher
 
-
+tr = Translater()
+tr.set_key(translater_key)
+tr.set_from_lang('en')
+tr.set_to_lang('ru')
 
 def voiceMessage(bot, update):
     file = bot.get_file(update.message.voice.file_id)
@@ -42,21 +46,9 @@ def voiceMessage(bot, update):
     #    bot.send_message(chat_id=update.message.chat_id, text=decodedData.get('result'))
     if decodedData.get("error_code") is None:
         speech_text = decodedData.get('result')
-        headers = {
-            'Authorization': 'Bearer '+IAM_TOKEN,
-        }
-
-        data = {
-            'text': speech_text,
-            'folderId': folder_id,
-            'target': 'en'
-
-        }
-
-        response = requests.post('https://translate.api.cloud.yandex.net/translate/v1/translate', headers=headers,
-                                 data=data)
-        bot.send_message(chat_id=update.message.chat_id, text=response.text)
-        # decodedData = json.loads(responseData)
+        tr.set_text(speech_text)
+        translated = tr.translate()
+        bot.send_message(chat_id=update.message.chat_id, text=translated)
 
 
 voice_message_handler = MessageHandler(Filters.voice, voiceMessage)
