@@ -54,7 +54,7 @@ def voiceMessage(bot, update):
 # Хендлеры
 start_command_handler = CommandHandler('start', startCommand)
 #text_message_handler = MessageHandler(Filters.text, textMessage)
-voice_message_handler = MessageHandler(Filters.text, textMessage)
+voice_message_handler = MessageHandler(Filters.voice, textMessage)
 
 
 # Добавляем хендлеры в диспетчер
