@@ -19,15 +19,6 @@ updater = Updater(token=token) # Токен API к Telegram
 dispatcher = updater.dispatcher
 
 
-# Обработка команд
-def startCommand(bot, update):
-    bot.send_message(chat_id=update.message.chat_id, text=IAM_TOKEN)
-
-
-def textMessage(bot, update):
-    response = 'Получил Ваше сообщение: ' + update.message.text
-    bot.send_message(chat_id=update.message.chat_id, text=response)
-
 
 def voiceMessage(bot, update):
     file = bot.get_file(update.message.voice.file_id)
@@ -47,19 +38,28 @@ def voiceMessage(bot, update):
     responseData = urllib.request.urlopen(url).read().decode('UTF-8')
     decodedData = json.loads(responseData)
 
+    #if decodedData.get("error_code") is None:
+    #    bot.send_message(chat_id=update.message.chat_id, text=decodedData.get('result'))
     if decodedData.get("error_code") is None:
-        bot.send_message(chat_id=update.message.chat_id, text=decodedData.get('result'))
+        speech_text=decodedData.get('result')
+        params = "&".join([
+            "text="+speech_text,
+            "target=en"
+            "folderId=%s" % folder_id,
+
+        ])
+
+        url = urllib.request.Request("https://stt.api.cloud.yandex.net/speech/v1/stt:recognize/?%s" % params)
+        url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
+
+        responseData = urllib.request.urlopen(url).read().decode('UTF-8')
+        bot.send_message(chat_id=update.message.chat_id, text=responseData)
+        # decodedData = json.loads(responseData)
 
 
-# Хендлеры
-start_command_handler = CommandHandler('start', startCommand)
-text_message_handler = MessageHandler(Filters.text, textMessage)
+
 voice_message_handler = MessageHandler(Filters.voice, voiceMessage)
 
-
-# Добавляем хендлеры в диспетчер
-dispatcher.add_handler(start_command_handler)
-dispatcher.add_handler(text_message_handler)
 dispatcher.add_handler(voice_message_handler)
 
 
