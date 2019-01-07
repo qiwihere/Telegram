@@ -26,7 +26,7 @@ def startCommand(bot, update):
 
 def textMessage(bot, update):
     response = 'Получил Ваше сообщение: ' + update.message.text
-    bot.send_message(chat_id=update.message.chat_id, text=response)
+    bot.send_message(chat_id=update.message.chat_id, text='kek')
 
 
 def voiceMessage(bot, update):
