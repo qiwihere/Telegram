@@ -42,20 +42,21 @@ def voiceMessage(bot, update):
     #    bot.send_message(chat_id=update.message.chat_id, text=decodedData.get('result'))
     if decodedData.get("error_code") is None:
         speech_text = decodedData.get('result')
-        params = "&".join([
-            "text=$s" % speech_text,
-            "target=en"
-            "folderId=%s" % folder_id,
+        headers = {
+            'Authorization': 'Bearer '+IAM_TOKEN,
+        }
 
-        ])
+        data = {
+            'text': speech_text,
+            'folderId': folder_id,
+            'target': 'en'
 
-        url = urllib.request.Request("https://translate.api.cloud.yandex.net/translate/v1/translate/?%s" % params)
-        url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
+        }
 
-        responseData = urllib.request.urlopen(url).read().decode('UTF-8')
+        response = requests.post('https://translate.api.cloud.yandex.net/translate/v1/translate', headers=headers,
+                                 data=data)
         bot.send_message(chat_id=update.message.chat_id, text=responseData)
         # decodedData = json.loads(responseData)
-
 
 
 voice_message_handler = MessageHandler(Filters.voice, voiceMessage)
