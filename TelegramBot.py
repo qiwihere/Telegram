@@ -26,7 +26,7 @@ def startCommand(bot, update):
 
 def textMessage(bot, update):
     response = 'Получил Ваше сообщение: ' + update.message.text
-    bot.send_message(chat_id=update.message.chat_id, text='kek')
+    bot.send_message(chat_id=update.message.chat_id, text=response)
 
 
 def voiceMessage(bot, update):
@@ -48,18 +48,18 @@ def voiceMessage(bot, update):
     decodedData = json.loads(responseData)
 
     if decodedData.get("error_code") is None:
-        bot.send_message(chat_id=update.message.chat_id, text=responseData)
+        bot.send_message(chat_id=update.message.chat_id, text=decodedData.get('result'))
 
 
 # Хендлеры
 start_command_handler = CommandHandler('start', startCommand)
-#text_message_handler = MessageHandler(Filters.text, textMessage)
-voice_message_handler = MessageHandler(Filters.voice, textMessage)
+text_message_handler = MessageHandler(Filters.text, textMessage)
+voice_message_handler = MessageHandler(Filters.voice, voiceMessage)
 
 
 # Добавляем хендлеры в диспетчер
 dispatcher.add_handler(start_command_handler)
-#dispatcher.add_handler(text_message_handler)
+dispatcher.add_handler(text_message_handler)
 dispatcher.add_handler(voice_message_handler)
 
 
