@@ -48,7 +48,7 @@ def voiceMessage(bot, update):
         speech_text = decodedData.get('result')
         tr.set_text(speech_text)
         translated = tr.translate()
-
+        '''
         params = "&".join([
             "text=%s" % translated,
             "lang=en-US",
@@ -61,9 +61,9 @@ def voiceMessage(bot, update):
         url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
         url.add_header("Transfer-Encoding", "chunked")
         responseData = urllib.request.urlopen(url).read()
-
+        '''
         bot.send_message(chat_id=update.message.chat_id, text=translated)
-        bot.voice_message(chat_id=update.message.chat_id, voice=responseData)
+       # bot.voice_message(chat_id=update.message.chat_id, voice=responseData)
 
 
 voice_message_handler = MessageHandler(Filters.voice, voiceMessage)
