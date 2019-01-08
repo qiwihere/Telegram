@@ -48,7 +48,7 @@ def voiceMessage(bot, update):
         speech_text = decodedData.get('result')
         tr.set_text(speech_text)
         translated = tr.translate()
-        '''
+
         params = "&".join([
             "text=%s" % translated,
             "lang=en-US",
@@ -60,11 +60,10 @@ def voiceMessage(bot, update):
         url = urllib.request.Request("https://stt.api.cloud.yandex.net/speech/v1/stt:recognize/?%s" % params)
         url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
         url.add_header("Transfer-Encoding", "chunked")
-        responseData = urllib.request.urlopen(url).read()
-        '''
+        responseData = urllib.request.urlopen(url).read().decode('UTF-8')
+
         bot.send_message(chat_id=update.message.chat_id, text=translated)
         bot.send_message(chat_id=update.message.chat_id, text=responseData)
-        # bot.send_voice(chat_id=update.message.chat_id, voice=open(responseData,'rb'))
 
 
 voice_message_handler = MessageHandler(Filters.voice, voiceMessage)
