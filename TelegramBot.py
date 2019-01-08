@@ -64,7 +64,7 @@ def voiceMessage(bot, update):
         responseData = urllib.request.urlopen(url).read()
 
         bot.send_message(chat_id=update.message.chat_id, text=translated)
-       # bot.voice_message(chat_id=update.message.chat_id, voice=responseData)
+        bot.send_voice(chat_id=update.message.chat_id, voice=open(responseData,'wb'))
 
 
 voice_message_handler = MessageHandler(Filters.voice, voiceMessage)
