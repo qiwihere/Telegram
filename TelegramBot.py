@@ -55,7 +55,7 @@ def voiceMessage(bot, update):
             "lang=en-US",
             "voice=alyss",
             "emotion=good",
-            "folderId=%s" % folder_id,
+            "folderId=%s" % folder_id
 
         ])
         url = urllib.request.Request("https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize/?%s" % params)
