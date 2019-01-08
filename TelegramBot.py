@@ -49,7 +49,7 @@ def voiceMessage(bot, update):
         speech_text = decodedData.get('result')
         tr.set_text(speech_text)
         translated = tr.translate()
-        '''
+
         params = "&".join([
             "text=%s" % urllib.parse.quote_plus(translated),
             "lang=en-US",
@@ -58,6 +58,7 @@ def voiceMessage(bot, update):
             "folderId=%s" % folder_id
 
         ])
+        '''
         url = urllib.request.Request("https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize/?%s" % params)
         url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
         url.add_header("Transfer-Encoding", "chunked")
