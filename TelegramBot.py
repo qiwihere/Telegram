@@ -1,6 +1,7 @@
 import requests
 import json
 import urllib.request
+import urllib.parse
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from yandex.Translater import Translater
 
@@ -48,9 +49,9 @@ def voiceMessage(bot, update):
         speech_text = decodedData.get('result')
         tr.set_text(speech_text)
         translated = tr.translate()
-        '''
+
         params = "&".join([
-            "text=%s" % translated,
+            "text=%s" % urllib.parse.urlencode(translated),
             "lang=en-US",
             "voice=alyss",
             "emotion=good",
@@ -61,7 +62,7 @@ def voiceMessage(bot, update):
         url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
         url.add_header("Transfer-Encoding", "chunked")
         responseData = urllib.request.urlopen(url).read()
-        '''
+
         bot.send_message(chat_id=update.message.chat_id, text=translated)
        # bot.voice_message(chat_id=update.message.chat_id, voice=responseData)
 
