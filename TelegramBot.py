@@ -51,7 +51,7 @@ def voiceMessage(bot, update):
         translated = tr.translate()
 
         params = "&".join([
-            "text=%s" % urllib.parse.urlencode(translated),
+            "text=%s" % urllib.parse.quote_plus(translated),
             "lang=en-US",
             "voice=alyss",
             "emotion=good",
@@ -61,10 +61,10 @@ def voiceMessage(bot, update):
         url = urllib.request.Request("https://tts.api.cloud.yandex.net/speech/v1/tts:synthesize/?%s" % params)
         url.add_header("Authorization", "Bearer %s" % IAM_TOKEN)
         url.add_header("Transfer-Encoding", "chunked")
-        #responseData = urllib.request.urlopen(url).read()
+        responseData = urllib.request.urlopen(url).read()
 
         bot.send_message(chat_id=update.message.chat_id, text=translated)
-        #bot.send_voice(chat_id=update.message.chat_id, voice=open(responseData,'wb'))
+        bot.send_voice(chat_id=update.message.chat_id, voice=responseData)
 
 
 voice_message_handler = MessageHandler(Filters.voice, voiceMessage)
